@@ -14,8 +14,17 @@ router.post(`/`, (req, res) => {
         res.status(201).json(post);
       })
       .catch((err) => {
-        res.status(500).json({ message: "Error adding post" });
+        res.status(500).json({ error: err.message });
       });
+  }
+});
+
+router.get(`/`, async (req, res) => {
+  try {
+    const posts = await Posts.find();
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
