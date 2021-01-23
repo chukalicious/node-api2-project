@@ -13,4 +13,19 @@ router.get(`/:id/comments`, async (req, res) => {
   }
 });
 
+router.post(`/:id/comments`, async (req, res) => {
+  const { id } = req.params;
+  const comment = req.body;
+  if (!comment.text) {
+    res.status(404).json({ message: "Please provide text for the comment." });
+  } else {
+    try {
+      const newComment = await Comment.insertComment(comment);
+      res.status(201).json(newComment);
+    } catch (err) {
+      res.status(500).json({ message: "Could not add comment at this time" });
+    }
+  }
+});
+
 module.exports = router;
