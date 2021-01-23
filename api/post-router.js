@@ -51,11 +51,30 @@ router.put(`/:id`, async (req, res) => {
       if (editedPost) {
         res.status(201).json(editedPost);
       } else {
-        res.status(404).json({ message: "unknown ID" });
+        res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist" });
       }
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res
+        .status(500)
+        .json({ error: "The post information could not be modified" });
     }
+  }
+});
+
+router.delete(`/:id`, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const postDelete = await Posts.remove(id);
+    if (postDelete) {
+      console.log("Post to delete: ", postDelete);
+      res.status(204).json(postDelete);
+    } else {
+      res.status(404).json({ messsage: "unknown ID" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Could not delete post" });
   }
 });
 
