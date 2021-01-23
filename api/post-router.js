@@ -38,4 +38,25 @@ router.get(`/:id`, async (req, res) => {
   }
 });
 
+router.put(`/:id`, async (req, res) => {
+  const id = req.params.id;
+  const updatedPost = req.body;
+  if (!updatedPost.title || !updatedPost.contents) {
+    res.status(400).json({
+      errorMessage: "Please provide title and contents for the post.",
+    });
+  } else {
+    try {
+      const editedPost = await Posts.update(id, updatedPost);
+      if (editedPost) {
+        res.status(201).json(editedPost);
+      } else {
+        res.status(404).json({ message: "unknown ID" });
+      }
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+});
+
 module.exports = router;
